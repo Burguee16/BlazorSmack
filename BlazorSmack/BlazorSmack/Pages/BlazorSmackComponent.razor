@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@using BlazorSmack.Components
+@page "/"
 
 <h1>Blazor Smack</h1>
 <div class="info-container">
@@ -8,5 +9,9 @@
 </div>
 
 <div class="board">
-
+    
+    @foreach(var s in Squares)
+    {
+        <Square SquareModel ="s"/> 
+    }
 </div>

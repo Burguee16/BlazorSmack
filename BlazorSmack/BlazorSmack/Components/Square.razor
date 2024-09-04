@@ -1,5 +1,40 @@
-﻿<h3>Square</h3>
+﻿
+<div class="square @SquareModel.Style" @onmouseup="ValidateHit"></div>
 
 @code {
+    /*PARAMETER ES UN ATRIBUTO QUE INDICA QUE LA PROPIEDAD QUE SE DEFINE A CONTINUACION 
+     * ES UN PARAMETRO DEL COMPONENTE.LOS PARAMETROS SON VALORES QUE SE PASAN DESDE UN COMPONENTE
+     * PADRE A UN COMPONENTE HIJO
+     */
+    [Parameter]
+    /*SQUAREMODEL ES EL TIPO DE PROPIEDAD. UNA CLASE LLAMADA SQUAREMODEL
+     * 
+     */
+    public SquareModel SquareModel { get; set; }
+    [Parameter]
+    /*En blazor EventCallBack es un tipo especial que representa un callback o devolucion de llamada
+     * que se ejecutara en respuesta a un evento
+     * OnMouseUp Es el nombre de la propiedad, en este caso sugiere que la propiedad se relaciona
+     * con el evento mouseup (cuando el usuario suelta el boton
+     * --------------------------------------------------------
+     * En resumen : Define una propiedad publica llamada OnMouseUp que es un callback que se ejecuta
+     * en respuesta al evento mouseup con el proposito de permitir que los componentes padres pasen 
+     * un callback que se ejecuta cuando ocurra el evento mouseup en el componente actual.De esta manera
+     * el componente padre puede manejar el evento mouseup de manera personalizada)
+     */
+    public EventCallback OnMouseUp{ get; set; }
+    //InvokeAsync:
+    //Es un metodo que se usa para invocar el callback de manera asincrona 
+    //EventArgs :
+    //Es un objeto que se pasa como parametro al callback -- Es una clase base para los argumentos
+    //de eventos en .NET
+    private void ValidateHit()
+    {
+        OnMouseUp.InvokeAsync(new EventArgs());
+    }
+    /*RESUMEN
+     * La funcion ValidateHit se ejecuta en respuesta a un evento y llama al callback OnmouseUp
+     * de manera asincrona, pasando un objeto EventArgs vacio como parametro.
+     */
 
 }
