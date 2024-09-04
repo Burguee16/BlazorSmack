@@ -12,6 +12,84 @@
     
     @foreach(var s in Squares)
     {
-        <Square SquareModel ="s"/> 
+        <Square SquareModel ="s" OnMouseUp="() => MouseUp(s)"/> 
     }
 </div>
+
+@code{
+    PeriodicTimer gameLoopTimer;
+    PeriodicTimer gameTimeTimer;
+
+    private void MouseUp(SquareModel s)
+    {
+        if (isGameRunning)
+        {
+            if(s.Id == hitPosition)
+            {
+                score += 1;
+            }
+        }
+    }
+    private Random random = new Random();
+    //El signo de pregunta hace que la variable pueda ser nula, sino tira error DATAZO
+    int? lastPosition = null;
+
+    private void SetNextAppearance()
+    {
+        foreach(var item in Squares)
+        {
+            item.IsShown = false;
+        }
+
+        int randomPosition;
+        //el ciclo do-while genera una nueva posicion aleatoria(randomPosition) hasta que sea
+        //diferente a la ultima posicion (lastPosition), se asegura que la ultima posicion no sea
+        //igual que la anterior
+        //---------Squares[randomPosition].IsShown = true;
+        //Una vez que genera una posicion diferente, esa linea cambia la propiedad isShown en true
+        //para el cuadrado en la lista de Squares
+        do
+        {
+            randomPosition = random.Next(0, 9);
+        } while (lastPosition == randomPosition);
+        Squares[randomPosition].IsShown = true;
+
+        hitPosition = randomPosition;
+
+        lastPosition = randomPosition;
+        //es un componente de blazor que notifica al componente que cambio su estado y que tiene 
+        //que volver a ser renderizado.
+        StateHasChanged();
+    }
+
+
+    //Este metodo contiene el bucle principal del juego que se ejecuta mientras el juego esta en curso
+    //En cada iteracion, establece la nueva aparicion de un cuadrado y espera hasta que el temporizador
+    //llegue a su proximo tick antes de continuar con la proxima iteracion.
+    private async Task GameLoopAsync(PeriodicTimer timer)
+    {
+        while (isGameRunning)
+        {
+            SetNextAppearance();
+            await timer.WaitForNextTickAsync();
+        }
+    }
+
+    //Este metodo decrementa el tiempo actual del juego en cada iteracion y verifica si termino
+    //Si llega a terminar, establece el fin del juego y  lo detiene, tambien avisa que el estado 
+    //del componente cambio.
+    private async Task GameTimeAsync(PeriodicTimer timer)
+    {
+        while (isGameRunning)
+        {
+            currentTime--;
+            if (currentTime ==0)
+            {
+                message = "Game ended!!!!";
+                isGameRunning = false;
+            }
+            StateHasChanged();
+            await timer.WaitForNextTickAsync();
+        }
+    }
+}

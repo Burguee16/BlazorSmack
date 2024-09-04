@@ -9,6 +9,7 @@ namespace BlazorSmack.Pages
         int hitPosition = 0;
         string message = "";
         int gameSpeed = 1000;
+        bool isGameRunning = true;
 
         public List<SquareModel> Squares { get; set; } =
             new List<SquareModel>();
