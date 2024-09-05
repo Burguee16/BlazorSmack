@@ -22,7 +22,7 @@
                 isShown = value;
                 if (isShown)
                 {
-                    Style = "square";
+                    Style = "mole";
                 }
                 else
                 {

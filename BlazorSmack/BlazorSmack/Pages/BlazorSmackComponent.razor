@@ -92,4 +92,24 @@
             await timer.WaitForNextTickAsync();
         }
     }
+    //La sobrecarga del metodo OnInitialized se usa para inicializar el temporizador del bucle
+    //del juego y llamar al metodo GameLoopAsync de manera asincrona
+    //--------------
+
+    protected override void OnInitialized()
+    {
+        //se crea un nuevo temporizador con un intervalo de tiempo especificado por gameSpeed 
+        //en milisegundos
+        gameLoopTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(gameSpeed));
+
+        //Se llama al metodo GameLoopAsync de manera asincrona pasando el temporizador gameLoopTimer
+        //como parametro .
+        // El "_" es un descarte por la tarea devuelta por el metodo, lo que significa que no se espera
+        //que la tarea se complete para continuar con la ejecucion del codigo 
+        _ = GameLoopAsync(gameLoopTimer);
+
+        gameTimeTimer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        _ = GameTimeAsync(gameTimeTimer);
+    }
 }

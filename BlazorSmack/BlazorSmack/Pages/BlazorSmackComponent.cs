@@ -5,10 +5,10 @@ namespace BlazorSmack.Pages
     public partial class BlazorSmackComponent
     {
         int score = 0;
-        int currentTime = 10;
+        int currentTime = 60;
         int hitPosition = 0;
         string message = "";
-        int gameSpeed = 1000;
+        int gameSpeed = 500;
         bool isGameRunning = true;
 
         public List<SquareModel> Squares { get; set; } =
